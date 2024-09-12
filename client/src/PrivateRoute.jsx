@@ -1,11 +1,10 @@
-// src/components/PrivateRoute.js
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import js-cookie to access cookies
 
 const PrivateRoute = () => {
-  // Check if token exists in localStorage to confirm user is authenticated
-  const token = localStorage.getItem('token');
-  
+  // Check if token exists in cookies to confirm user is authenticated
+  const token = Cookies.get('token'); // Get the token from cookies
   if (!token) {
     // If no token, redirect to SignIn page
     return <Navigate to="/signin" />;

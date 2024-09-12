@@ -16,7 +16,12 @@ const UpdateJobListing = () => {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/jobs/get-job/${id}`);
+        const token = localStorage.getItem('token'); // Retrieve token from localStorage
+        const response = await axios.get(`http://localhost:3000/api/jobs/get-job/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Set token in headers
+          },
+        });
         setJobTitle(response.data.title);
         setJobDescription(response.data.description);
       } catch (error) {
@@ -44,10 +49,15 @@ const UpdateJobListing = () => {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('token'); // Retrieve token from localStorage
       // Send a PUT request to update the job details
       await axios.put(`http://localhost:3000/api/jobs/update-job/${id}`, {
         title: jobTitle,
         description: jobDescription,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Set token in headers
+        },
       });
 
       // Show success message and navigate back to the job details page

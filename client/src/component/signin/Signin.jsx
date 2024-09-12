@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Ensure 'react-router-dom' is used here
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/authSlice';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate = useNavigate(); // Correctly used 'useNavigate' for redirection
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Prefill email and password if stored in localStorage
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
+
+    if (storedEmail) setEmail(storedEmail);
+    if (storedPassword) setPassword(storedPassword);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/users/login', {
-        email,
-        password,
-      });
+      // Send login request with credentials
+      const response = await axios.post(
+        'http://localhost:3000/api/users/login',
+        { email, password },
+        { withCredentials: true } // Allows cookies to be sent with the request if needed
+      );
 
-      // Assuming the server sends user data and token
+     
+
+      // Extract token and user data from the response
       const { token, user } = response.data;
 
-      // Store user data and credentials in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      // Check if token exists and store it in localStorage
+      if (token) {
+        localStorage.setItem('token', token); // Save token in localStorage
+        console.log('Token saved:', token);
 
-      // On successful login
-      setSuccess('Login successful');
-      setError('');
-      toast.success('Login Success');
-      navigate('/dashboard'); // Redirect to dashboard
+        // Optionally store email and password for future login prefilling
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', password);
+
+        // Dispatch user data to Redux store
+        dispatch(setUser(user));
+
+        setSuccess('Login successful');
+        setError('');
+        toast.success('Login Success');
+        navigate('/dashboard');
+      } else {
+        throw new Error('No token received');
+      }
     } catch (error) {
-      // On login failure
       setError('Invalid email or password');
       setSuccess('');
       toast.error('Invalid email or password');
@@ -70,7 +95,7 @@ const SignIn = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-slate-800 text-white py-2 px-4  hover:rounded-full hover:opacity-85 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-slate-800 text-white py-2 px-4 hover:rounded-full hover:opacity-85 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Sign In
           </button>

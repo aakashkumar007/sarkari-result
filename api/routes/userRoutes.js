@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const connection = require('../db');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Endpoint to set user email and password (e.g., during initial setup)
 router.post('/setup', async (req, res) => {
@@ -61,10 +64,25 @@ router.post('/login', (req, res) => {
           return res.status(401).send('Invalid email or password');
         }
 
-        // Send user data to store in local storage on the frontend
+        // Generate JWT token with user's id and email
+        const token = jwt.sign(
+          { id: user.id, email: user.email }, 
+          JWT_SECRET, 
+          { expiresIn: '3d' }  // Token expiration set to 3 days
+        );
+
+        // Set token in an HTTP-only cookie with secure settings
+        res.cookie('token', token, {
+          httpOnly: false,  // Prevent JavaScript access to cookies
+          secure: process.env.NODE_ENV === 'development',  // Enable HTTPS only in production
+          maxAge: 72 * 60 * 60 * 1000  // Cookie expires in 3 days
+        });
+
+        // Send user data to store in frontend's local state (not localStorage)
         res.json({
           message: 'Login successful',
-          user: { email: user.email, id: user.id }
+          user: { email: user.email, id: user.id },
+          token
         });
       });
     }

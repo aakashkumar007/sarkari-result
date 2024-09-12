@@ -1,67 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux"; // Import hooks for Redux
+import { clearUser, setUser } from "../../redux/authSlice"; // Import actions
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Access user information from Redux state
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
-    // Check if the user is authenticated by checking localStorage
+    // Check if the token exists in cookies to determine login status
     const checkAuthStatus = () => {
-      const userData = localStorage.getItem('user');
-      setIsLoggedIn(!!userData); // Set isLoggedIn to true if user exists
+      const token = Cookies.get("token"); // Fetch the token from cookies
+      if (token) {
+        // Simulate fetching user info based on the token, e.g., a stored user object in cookies or a server call
+        const user = { name: "John Doe" }; // Replace this with actual user info from the token or server
+        dispatch(setUser(user)); // Set user info in Redux
+      } else {
+        dispatch(clearUser()); // Clear user info if not authenticated
+      }
     };
 
     checkAuthStatus();
-  }, []);
+  }, [dispatch]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('user'); // Remove user from localStorage on signout
-    toast.success('Logout Success');
-    setIsLoggedIn(false);
+  const handleSignOut = async () => {
+    try {
+      // Simulate logout by clearing cookies and Redux state
+      Cookies.remove("token");
+      localStorage.removeItem("token");
 
-    navigate('/signin'); // Redirect to signin page after logout
+      dispatch(clearUser()); // Clear user info in Redux state
+      toast.success("Logout Success");
+      navigate("/signin");
+    } catch (error) {
+      toast.error("Error during logout");
+    }
   };
 
   return (
-    <header className="font-semibold py-4 shadow-md text-slate-800 bg-slate-200" style={{ fontFamily: 'Roboto, sans-serif' }} >
+    <header className="font-semibold py-4 shadow-md text-slate-800 bg-slate-200">
       <nav className="container mx-auto flex flex-wrap justify-between items-center">
-      <Link to="/">
-      <span className='flex gap-4 pl-6'>
-      <img src='https://cdn-icons-png.freepik.com/256/15890/15890765.png?ga=GA1.1.22124692.1725342488&semt=ais_hybrid' alt='logo' className='h-13 w-12 hover:bg-slate-600 rounded-full  '/>
-      <h1 className="text-xl font-bold mt-3 ">Sarkari Naukari</h1>
-      </span>
-      </Link>
+        <Link to="/">
+          <span className="flex gap-4 pl-6">
+            <img
+              src="https://cdn-icons-png.freepik.com/256/15890/15890765.png?ga=GA1.1.22124692.1725342488&semt=ais_hybrid"
+              alt="logo"
+              className="h-13 w-12 hover:bg-slate-600 rounded-full"
+            />
+            <h1 className="text-xl font-bold mt-3">Sarkari Naukari</h1>
+          </span>
+        </Link>
 
-        {/* Horizontal Menu for Desktop */}
         <div className="hidden lg:flex space-x-6">
-          <Link to="/" className="hover:text-indigo-300">Home</Link>
-          <Link to="#jobs" className="hover:text-indigo-300">Latest Jobs</Link>
-          <Link to="#results" className="hover:text-indigo-300">Results</Link>
-          <Link to="#admit-cards" className="hover:text-indigo-300">Admit Card</Link>
-          <Link to="#answer-key" className="hover:text-indigo-300">Answer Key</Link>
-          <Link to="#syllabus" className="hover:text-indigo-300">Syllabus</Link>
-          <Link to="#search" className="hover:text-indigo-300">Search</Link>
-          <Link to="#contact" className="hover:text-indigo-300">Contact Us</Link>
+          <Link to="/" className="hover:text-indigo-300">
+            Home
+          </Link>
+          <Link to="/get-all-jobs" className="hover:text-indigo-300">
+            Latest Jobs
+          </Link>
+          <Link to="/get-all-results" className="hover:text-indigo-300">
+            Results
+          </Link>
+          <Link to="/get-all-admit-cards" className="hover:text-indigo-300">
+            Admit Card
+          </Link>
+          <Link to="#answer-key" className="hover:text-indigo-300">
+            Answer Key
+          </Link>
+          <Link to="#syllabus" className="hover:text-indigo-300">
+            Syllabus
+          </Link>
+          <Link to="#search" className="hover:text-indigo-300">
+            Search
+          </Link>
+          <Link to="#contact" className="hover:text-indigo-300">
+            Contact Us
+          </Link>
 
-          {/* Conditionally render Dashboard or Sign In based on login status */}
-          {isLoggedIn ? (
+          {/* Conditionally render Dashboard or Sign In based on Redux user state */}
+          {userInfo ? (
             <>
-              <Link to="/dashboard" className="bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white">Dashboard</Link>
-              <button onClick={handleSignOut} className="bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white">Sign Out</button>
+              <Link
+                to="/dashboard"
+                className="bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white"
+              >
+                Hello! Prakash
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white"
+              >
+                Sign Out
+              </button>
             </>
           ) : (
-            <Link to="/signin" className=" bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white ">Sign In</Link>
+            <Link
+              to="/signin"
+              className="bg-slate-800 p-2 hover:rounded-full hover:text-yellow-100 text-white"
+            >
+              Sign In
+            </Link>
           )}
         </div>
 
-        {/* Dropdown Button for Mobile */}
         <div className="lg:hidden relative">
           <button
             onClick={toggleDropdown}
@@ -69,38 +121,75 @@ const Header = () => {
           >
             <span>Menu</span>
             <svg
-              className={`w-5 h-5 transform transition-transform ${isDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
+              className={`w-5 h-5 transform transition-transform ${
+                isDropdownOpen ? "rotate-180" : "rotate-0"
+              }`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
           {isDropdownOpen && (
             <ul className="absolute right-0 mt-2 bg-white text-gray-800 shadow-lg rounded-lg w-48">
-              <li><Link to="/" className="block px-4 py-2 hover:bg-indigo-100">Home</Link></li>
-              <li><Link to="#jobs" className="block px-4 py-2 hover:bg-indigo-100">Latest Jobs</Link></li>
-              <li><Link to="#results" className="block px-4 py-2 hover:bg-indigo-100">Results</Link></li>
-              <li><Link to="#admit-cards" className="block px-4 py-2 hover:bg-indigo-100">Admit Card</Link></li>
-              <li><Link to="#answer-key" className="block px-4 py-2 hover:bg-indigo-100">Answer Key</Link></li>
-              <li><Link to="#syllabus" className="block px-4 py-2 hover:bg-indigo-100">Syllabus</Link></li>
-              <li><Link to="#search" className="block px-4 py-2 hover:bg-indigo-100">Search</Link></li>
-              <li><Link to="#contact" className="block px-4 py-2 hover:bg-indigo-100">Contact Us</Link></li>
+              {/* Mobile Menu Links */}
+              <li>
+                <Link to="/" className="block px-4 py-2 hover:bg-indigo-100">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/get-all-results"
+                  className="block px-4 py-2 hover:bg-indigo-100"
+                >
+                  Results
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/get-all-admit-cards"
+                  className="block px-4 py-2 hover:bg-indigo-100"
+                >
+                  Admit Cards
+                </Link>
+              </li>
 
-              {/* Conditionally render Dashboard or Sign In based on login status */}
-              {isLoggedIn ? (
+              {userInfo ? (
                 <>
-                  <li><Link to="/dashboard" className="block px-4 py-2 hover:bg-indigo-100">Dashboard</Link></li>
                   <li>
-                    <button onClick={handleSignOut} className="block px-4 py-2 hover:bg-indigo-100 w-full text-left">
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 hover:bg-indigo-100"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleSignOut}
+                      className="block px-4 py-2 hover:bg-indigo-100 w-full text-left"
+                    >
                       Sign Out
                     </button>
                   </li>
                 </>
               ) : (
-                <li><Link to="/signin" className="block px-4 py-2 hover:bg-indigo-100">Sign In</Link></li>
+                <li>
+                  <Link
+                    to="/signin"
+                    className="block px-4 py-2 hover:bg-indigo-100"
+                  >
+                    Sign In
+                  </Link>
+                </li>
               )}
             </ul>
           )}

@@ -16,6 +16,23 @@ const DashboardMenu = () => {
               Add Job Listing
             </Link>
           </li>
+          <li>
+            <Link
+              to="/dashboard/add-result"
+              className="text-indigo-600 hover:underline "
+            >
+              Add results
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              to="/dashboard/add-admit-card"
+              className="text-indigo-600 hover:underline "
+            >
+              Add Admit Cards
+            </Link>
+          </li>
 
           
         </ul>

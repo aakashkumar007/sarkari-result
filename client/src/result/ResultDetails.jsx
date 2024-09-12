@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-const JobDetails = () => {
-  const { id } = useParams(); // Get the job ID from the URL
+const ResultDetails = () => {
+  const { id } = useParams(); // Get the result ID from the URL
   const navigate = useNavigate(); // Initialize navigate
-  const [job, setJob] = useState(null);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,24 +20,17 @@ const JobDetails = () => {
   }, []);
 
   useEffect(() => {
-    const fetchJobDetails = async () => {
+    const fetchResultDetails = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await fetch(`http://localhost:3000/api/jobs/get-job/${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // Set token in headers
-          },
-          credentials: 'include', // Ensure cookies are included if your server requires this
-        });
+        const response = await fetch(`http://localhost:3000/api/result/get-result/${id}`);
 
         if (!response.ok) {
-          throw new Error('Failed to fetch job details');
+          throw new Error('Failed to fetch result details');
         }
 
         const data = await response.json();
-        setJob(data);
+        setResult(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -45,17 +38,17 @@ const JobDetails = () => {
       }
     };
 
-    fetchJobDetails();
+    fetchResultDetails();
   }, [id]);
 
   const handleUpdate = () => {
-    navigate(`/dashboard/update-job/${id}`); // Navigate to the update page
+    navigate(`/dashboard/update-result/${id}`); // Navigate to the update page
   };
 
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
-      const response = await fetch(`http://localhost:3000/api/jobs/delete-job/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/result/delete-result/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, // Set token in headers
@@ -64,13 +57,13 @@ const JobDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete job');
+        throw new Error('Failed to delete result');
       }
 
-      toast.success('Job Deleted successfully');
-      navigate('/'); // Navigate to jobs list after deletion
+      toast.success(`Result with ${result.title} Deleted successfully`);
+      navigate('/get-all-results'); // Navigate to results list after deletion
     } catch (err) {
-      setError('Failed to delete job');
+      setError('Failed to delete result');
     }
   };
 
@@ -82,14 +75,14 @@ const JobDetails = () => {
     return <div>{error}</div>;
   }
 
-  if (!job) {
-    return <div>No job found</div>;
+  if (!result) {
+    return <div>No result found</div>;
   }
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Job Details</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Result Details</h1>
         <div className="bg-white shadow-lg rounded-lg p-6">
           <table className="min-w-full bg-white">
             <thead>
@@ -99,20 +92,19 @@ const JobDetails = () => {
               </tr>
             </thead>
             <tbody>
-            
               <tr>
                 <td className="py-2 px-4 border-b">Title</td>
-                <td className="py-2 px-4 border-b">{job.title}</td>
+                <td className="py-2 px-4 border-b">{result.title}</td>
               </tr>
               <tr>
                 <td className="py-2 px-4 border-b">Description</td>
                 <td className="py-2 px-4 border-b">
-                  <div dangerouslySetInnerHTML={{ __html: job.description }} />
+                  <div dangerouslySetInnerHTML={{ __html: result.description }} />
                 </td>
               </tr>
               <tr>
                 <td className="py-2 px-4 border-b">Created At</td>
-                <td className="py-2 px-4 border-b">{new Date(job.created_at).toLocaleString()}</td>
+                <td className="py-2 px-4 border-b">{new Date(result.created_at).toLocaleString()}</td>
               </tr>
             </tbody>
           </table>
@@ -122,13 +114,13 @@ const JobDetails = () => {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={handleUpdate}
-                className="bg-green-600 font-mono border-black border-2 text-white px-4 py-2 hover:rounded-full"
+                className="bg-green-600 text-white px-4 py-2 rounded-md border-2 border-black hover:bg-green-700"
               >
                 Update
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-900 text-white px-4 py-2 hover:bg-red-600 hover:rounded-full font-mono border-black border-2"
+                className="bg-red-600 text-white px-4 py-2 rounded-md border-2 border-black hover:bg-red-700"
               >
                 Delete
               </button>
@@ -140,4 +132,4 @@ const JobDetails = () => {
   );
 };
 
-export default JobDetails;
+export default ResultDetails;

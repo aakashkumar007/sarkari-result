@@ -26,10 +26,16 @@ const AddJobListing = () => {
     setLoading(true);
 
     try {
-      // Send a POST request to the backend API
-      await axios.post('http://localhost:3000/api/jobs/post-jobs', {
+      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
+      // Send a POST request to the backend API with Authorization header
+      await axios.post(`http://localhost:3000/api/jobs/post-jobs`, {
         title: jobTitle,
         description: jobDescription,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Include token in headers
+        },
       });
 
       // Show success message and reset the form

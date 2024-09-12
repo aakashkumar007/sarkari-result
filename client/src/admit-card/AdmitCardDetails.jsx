@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-const JobDetails = () => {
-  const { id } = useParams(); // Get the job ID from the URL
-  const navigate = useNavigate(); // Initialize navigate
-  const [job, setJob] = useState(null);
+const AdmitCardDetails = () => {
+  const { id } = useParams(); // Get the admit card ID from the URL
+  const navigate = useNavigate();
+  const [admitCard, setAdmitCard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,24 +20,24 @@ const JobDetails = () => {
   }, []);
 
   useEffect(() => {
-    const fetchJobDetails = async () => {
+    const fetchAdmitCardDetails = async () => {
       try {
-        const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await fetch(`http://localhost:3000/api/jobs/get-job/${id}`, {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/admit-card/get-admit-card/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // Set token in headers
+            'Authorization': `Bearer ${token}`,
           },
-          credentials: 'include', // Ensure cookies are included if your server requires this
+          credentials: 'include',
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch job details');
+          throw new Error('Failed to fetch admit card details');
         }
 
         const data = await response.json();
-        setJob(data);
+        setAdmitCard(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -45,32 +45,32 @@ const JobDetails = () => {
       }
     };
 
-    fetchJobDetails();
+    fetchAdmitCardDetails();
   }, [id]);
 
   const handleUpdate = () => {
-    navigate(`/dashboard/update-job/${id}`); // Navigate to the update page
+    navigate(`/dashboard/update-admit-card/${id}`);
   };
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem('token'); // Retrieve token from localStorage
-      const response = await fetch(`http://localhost:3000/api/jobs/delete-job/${id}`, {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/api/admit-card/delete-admit-card/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`, // Set token in headers
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include', // Ensure cookies are included if your server requires this
+        credentials: 'include',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete job');
+        throw new Error('Failed to delete admit card');
       }
 
-      toast.success('Job Deleted successfully');
-      navigate('/'); // Navigate to jobs list after deletion
+      toast.success('Admit Card Deleted successfully');
+      navigate('/admit-cards');
     } catch (err) {
-      setError('Failed to delete job');
+      setError('Failed to delete admit card');
     }
   };
 
@@ -82,14 +82,14 @@ const JobDetails = () => {
     return <div>{error}</div>;
   }
 
-  if (!job) {
-    return <div>No job found</div>;
+  if (!admitCard) {
+    return <div>No admit card found</div>;
   }
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Job Details</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Admit Card Details</h1>
         <div className="bg-white shadow-lg rounded-lg p-6">
           <table className="min-w-full bg-white">
             <thead>
@@ -99,36 +99,34 @@ const JobDetails = () => {
               </tr>
             </thead>
             <tbody>
-            
               <tr>
                 <td className="py-2 px-4 border-b">Title</td>
-                <td className="py-2 px-4 border-b">{job.title}</td>
+                <td className="py-2 px-4 border-b">{admitCard.title}</td>
               </tr>
               <tr>
                 <td className="py-2 px-4 border-b">Description</td>
                 <td className="py-2 px-4 border-b">
-                  <div dangerouslySetInnerHTML={{ __html: job.description }} />
+                  <div dangerouslySetInnerHTML={{ __html: admitCard.description }} />
                 </td>
               </tr>
               <tr>
                 <td className="py-2 px-4 border-b">Created At</td>
-                <td className="py-2 px-4 border-b">{new Date(job.created_at).toLocaleString()}</td>
+                <td className="py-2 px-4 border-b">{new Date(admitCard.created_at).toLocaleDateString()}</td>
               </tr>
             </tbody>
           </table>
 
-          {/* Only show Update and Delete buttons if authenticated */}
           {isAuthenticated && (
             <div className="mt-6 flex gap-4">
               <button
                 onClick={handleUpdate}
-                className="bg-green-600 font-mono border-black border-2 text-white px-4 py-2 hover:rounded-full"
+                className="bg-green-600 text-white px-4 py-2 rounded-md border-2 border-black hover:bg-green-700"
               >
                 Update
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-900 text-white px-4 py-2 hover:bg-red-600 hover:rounded-full font-mono border-black border-2"
+                className="bg-red-600 text-white px-4 py-2 rounded-md border-2 border-black hover:bg-red-700"
               >
                 Delete
               </button>
@@ -140,4 +138,4 @@ const JobDetails = () => {
   );
 };
 
-export default JobDetails;
+export default AdmitCardDetails;
