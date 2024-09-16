@@ -1,0 +1,12 @@
+{
+  "name": "sarkari-nuakari",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "npm start --prefix client", 
+    "api": "npm start --prefix api",        
+    "dev": "concurrently \"npm run client\" \"npm run api\""  
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"  
+  }
+}
