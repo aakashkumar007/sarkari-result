@@ -12,11 +12,13 @@ const UpdateResult = () => {
   const [resultDescription, setResultDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchResultDetails = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await axios.get(`http://localhost:3000/api/result/get-result/${id}`, {
+        const response = await axios.get(`${apiUrl}/api/result/get-result/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Set token in headers
           },
@@ -50,7 +52,7 @@ const UpdateResult = () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
       // Send a PUT request to update the result details
-      await axios.put(`http://localhost:3000/api/result/update-result/${id}`, {
+      await axios.put(`${apiUrl}/api/result/update-result/${id}`, {
         title: resultTitle,
         description: resultDescription,
       }, {

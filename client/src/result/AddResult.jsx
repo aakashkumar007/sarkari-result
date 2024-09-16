@@ -9,6 +9,8 @@ const AddResult = () => {
   const [resultDescription, setResultDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   const handleTitleChange = (e) => {
     setResultTitle(e.target.value);
   };
@@ -28,7 +30,7 @@ const AddResult = () => {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
 
       // Send a POST request to the backend API with Authorization header
-      await axios.post(`http://localhost:3000/api/result/post-results`, {
+      await axios.post(`${apiUrl}/api/result/post-results`, {
         title: resultTitle,
         description: resultDescription,
       }, {

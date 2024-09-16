@@ -10,6 +10,8 @@ const AdmitCardDetails = () => {
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const checkAuthentication = () => {
       const token = localStorage.getItem('token');
@@ -23,7 +25,7 @@ const AdmitCardDetails = () => {
     const fetchAdmitCardDetails = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/admit-card/get-admit-card/${id}`, {
+        const response = await fetch(`${apiUrl}/api/admit-card/get-admit-card/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ const AdmitCardDetails = () => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/admit-card/delete-admit-card/${id}`, {
+      const response = await fetch(`${apiUrl}/api/admit-card/delete-admit-card/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -68,7 +70,7 @@ const AdmitCardDetails = () => {
       }
 
       toast.success('Admit Card Deleted successfully');
-      navigate('/admit-cards');
+      navigate('/');
     } catch (err) {
       setError('Failed to delete admit card');
     }

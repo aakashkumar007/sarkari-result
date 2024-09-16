@@ -8,12 +8,14 @@ const AllAdmitCards = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const admitCardsPerPage = 15; // Adjust the number of admit cards per page
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchAdmitCards = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token'); // Get token from local storage
-        const response = await fetch('http://localhost:3000/api/admit-card/get-admit-cards', {
+        const response = await fetch(`${apiUrl}/api/admit-card/get-admit-cards`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

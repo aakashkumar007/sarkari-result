@@ -8,6 +8,8 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -16,7 +18,7 @@ const HomePage = () => {
         const token = localStorage.getItem('token'); // Get token from local storage
 
         // Fetch jobs
-        const jobsResponse = await fetch('http://localhost:3000/api/jobs/get-jobs', {
+        const jobsResponse = await fetch(`${apiUrl}/api/jobs/get-jobs`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -35,7 +37,7 @@ const HomePage = () => {
         setJobs(sortedJobs);
 
         // Fetch results
-        const resultsResponse = await fetch('http://localhost:3000/api/result/get-results', {
+        const resultsResponse = await fetch(`${apiUrl}/api/result/get-results`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ const HomePage = () => {
         setResults(sortedResults);
 
         // Fetch admit cards
-        const admitCardsResponse = await fetch('http://localhost:3000/api/admit-card/get-admit-cards', {
+        const admitCardsResponse = await fetch(`${apiUrl}/api/admit-card/get-admit-cards`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

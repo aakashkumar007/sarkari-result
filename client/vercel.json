@@ -2,21 +2,18 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/**/*",  
+        "src": "package.json",
         "use": "@vercel/static-build",
         "config": {
-          "distDir": "build"  
+          "distDir": "dist"
         }
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/index.html" 
+        "dest": "/index.html"
       }
-    ],
-    "env": {
-      "REACT_APP_API_URL": "https://sarkari-result-padhdgt14-aakashkumar007s-projects.vercel.app/" 
-    }
+    ]
   }
   

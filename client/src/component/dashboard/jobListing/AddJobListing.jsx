@@ -10,6 +10,8 @@ const AddJobListing = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   const handleTitleChange = (e) => {
     setJobTitle(e.target.value);
   };
@@ -29,7 +31,7 @@ const AddJobListing = () => {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
 
       // Send a POST request to the backend API with Authorization header
-      await axios.post(`http://localhost:3000/api/jobs/post-jobs`, {
+      await axios.post(`${apiUrl}/api/jobs/post-jobs`, {
         title: jobTitle,
         description: jobDescription,
       }, {

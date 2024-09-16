@@ -13,11 +13,13 @@ const UpdateJobListing = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await axios.get(`http://localhost:3000/api/jobs/get-job/${id}`, {
+        const response = await axios.get(`${apiUrl}/api/jobs/get-job/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Set token in headers
           },
@@ -51,7 +53,7 @@ const UpdateJobListing = () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
       // Send a PUT request to update the job details
-      await axios.put(`http://localhost:3000/api/jobs/update-job/${id}`, {
+      await axios.put(`${apiUrl}/api/jobs/update-job/${id}`, {
         title: jobTitle,
         description: jobDescription,
       }, {

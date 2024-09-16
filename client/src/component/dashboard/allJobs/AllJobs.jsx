@@ -8,18 +8,21 @@ const AllJobsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 15; // Adjust the number of jobs per page
 
+  // Access the environment variable
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchJobData = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token'); // Get token from local storage
-        const response = await fetch('http://localhost:3000/api/jobs/get-jobs', {
+        const response = await fetch(`${apiUrl}/api/jobs/get-jobs`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
           },
-          credentials: 'include' // Send cookies with the request
+          credentials: 'include', // Send cookies with the request
         });
 
         if (!response.ok) {
@@ -36,7 +39,7 @@ const AllJobsPage = () => {
       }
     };
     fetchJobData();
-  }, []);
+  }, [apiUrl]);  // Make sure to add apiUrl as a dependency
 
   if (loading) {
     return <div>Loading data...</div>;
@@ -72,16 +75,16 @@ const AllJobsPage = () => {
           All Jobs
         </h1>
 
-        <section className="bg-white shadow-md rounded-lg p-4"> {/* Adjusted padding */}
+        <section className="bg-white shadow-md rounded-lg p-4">
           {currentJobs.length > 0 ? (
             currentJobs.map((job) => (
               <div
                 key={job.id}
-                className="border-b border-gray-300 py-1" // Reduced padding
-                style={{ marginBottom: '2px', padding: '0 4px' }} // Reduced margin and padding
+                className="border-b border-gray-300 py-1"
+                style={{ marginBottom: '2px', padding: '0 4px' }}
               >
-                <div className="flex justify-center items-center"> {/* Center items horizontally */}
-                  <div className="w-full text-center"> {/* Full width and centered text */}
+                <div className="flex justify-center items-center">
+                  <div className="w-full text-center">
                     <Link
                       to={`/job/${job.id}`}
                       className="text-lg font-serif text-gray-800 hover:underline"
@@ -90,11 +93,11 @@ const AllJobsPage = () => {
                       {job.title}
                     </Link>
                   </div>
-                  <div className="text-right w-full mt-1"> {/* Full width and aligned to right */}
+                  <div className="text-right w-full mt-1">
                     <p className="text-gray-500 text-xs">
                       {new Date(job.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
-                        month: 'short', // Shortened month name
+                        month: 'short',
                         day: 'numeric',
                       })}
                     </p>
@@ -108,8 +111,7 @@ const AllJobsPage = () => {
             <p>No jobs available at the moment.</p>
           )}
 
-          {/* Pagination Controls */}
-          <div className="flex justify-between mt-4"> {/* Reduced margin */}
+          <div className="flex justify-between mt-4">
             <button
               className={`px-3 py-1 text-white rounded-md ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'}`}
               onClick={handlePreviousPage}
@@ -117,7 +119,7 @@ const AllJobsPage = () => {
             >
               Previous
             </button>
-            <p className="text-sm text-gray-700">Page {currentPage} of {totalPages}</p> {/* Reduced font size */}
+            <p className="text-sm text-gray-700">Page {currentPage} of {totalPages}</p>
             <button
               className={`px-3 py-1 text-white rounded-md ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'}`}
               onClick={handleNextPage}

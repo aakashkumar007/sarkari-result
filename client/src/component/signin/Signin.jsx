@@ -13,6 +13,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   // Prefill email and password if stored in localStorage
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
@@ -28,7 +30,7 @@ const SignIn = () => {
     try {
       // Send login request with credentials
       const response = await axios.post(
-        'http://localhost:3000/api/users/login',
+        `${apiUrl}/api/users/login`,
         { email, password },
         { withCredentials: true } // Allows cookies to be sent with the request if needed
       );

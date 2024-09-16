@@ -8,12 +8,14 @@ const AllResult = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 15; // Adjust the number of results per page
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const fetchResultsData = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token'); // Get token from local storage
-        const response = await fetch('http://localhost:3000/api/result/get-results', {
+        const response = await fetch(`${apiUrl}/api/result/get-results`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

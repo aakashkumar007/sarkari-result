@@ -10,6 +10,8 @@ const ResultDetails = () => {
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const checkAuthentication = () => {
       const token = localStorage.getItem('token');
@@ -23,7 +25,7 @@ const ResultDetails = () => {
     const fetchResultDetails = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await fetch(`http://localhost:3000/api/result/get-result/${id}`);
+        const response = await fetch(`${apiUrl}/api/result/get-result/${id}`);
 
         if (!response.ok) {
           throw new Error('Failed to fetch result details');
@@ -48,7 +50,7 @@ const ResultDetails = () => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
-      const response = await fetch(`http://localhost:3000/api/result/delete-result/${id}`, {
+      const response = await fetch(`${apiUrl}/api/result/delete-result/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, // Set token in headers

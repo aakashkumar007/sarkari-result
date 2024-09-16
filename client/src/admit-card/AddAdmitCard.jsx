@@ -11,6 +11,8 @@ const AddAdmitCardPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,7 +28,7 @@ const AddAdmitCardPage = () => {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
 
       // Send a POST request to the backend API with Authorization header
-      await axios.post('http://localhost:3000/api/admit-card/post-admit-cards', {
+      await axios.post(`${apiUrl}/api/admit-card/post-admit-cards`, {
         title,
         description,
       }, {

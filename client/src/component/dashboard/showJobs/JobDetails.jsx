@@ -10,6 +10,8 @@ const JobDetails = () => {
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_API_URL;
+
   useEffect(() => {
     const checkAuthentication = () => {
       const token = localStorage.getItem('token');
@@ -23,7 +25,7 @@ const JobDetails = () => {
     const fetchJobDetails = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const response = await fetch(`http://localhost:3000/api/jobs/get-job/${id}`, {
+        const response = await fetch(`${apiUrl}/api/jobs/get-job/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ const JobDetails = () => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
-      const response = await fetch(`http://localhost:3000/api/jobs/delete-job/${id}`, {
+      const response = await fetch(`${apiUrl}/api/jobs/delete-job/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, // Set token in headers
