@@ -26,6 +26,7 @@ router.post("/post-jobs",authenticateUser, (req, res) => {
 
 // Get all job listings
 router.get("/get-jobs", (req, res) => {
+  
   const query = "SELECT * FROM job_listings";
   db.query(query, (err, results) => {
     if (err) {

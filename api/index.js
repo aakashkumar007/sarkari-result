@@ -4,15 +4,18 @@ const userRoutes = require('./routes/userRoutes.js');
 const jobRoutes = require("./routes/jobRoutes.js")
 const resultRoutes = require("./routes/resultRoutes.js");
 const admitCardRoutes = require("./routes/admitCardRoutes.js");
+require("dotenv").config();
 
 const cors = require('cors');
+
+const frontendUrl=process.env.FRONTEND;
 
 const app = express();
 
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: `${frontendUrl}`,
     credentials:true,
   }));
 
@@ -25,7 +28,7 @@ app.use('/api/result', resultRoutes);
 app.use('/api/admit-card', admitCardRoutes);
 
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`Server is running`);
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server is running`); 
 });
