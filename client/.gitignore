@@ -1,0 +1,85 @@
+.vercel
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build directories
+dist/
+build/
+
+# Environment variables
+.env
+.env.*.local
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm/
+
+# Optional REPL history
+.node_repl_history
+
+# Test coverage
+coverage/
+
+# IDE-specific settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Miscellaneous
+*.pid
+*.seed
+*.pid.lock
+
+# Output of npm pack
+*.tgz
+
+# Yarn Integrity File
+.yarn-integrity
+
+# dotenv environment variables file
+.env.local
+.env.test
+.env.production
+
+# Parcel-bundler cache
+.cache/
+
+# Next.js build output
+.next/
+
+# Svelte build output
+.svelte-kit/
+
+# Nuxt.js build output
+.nuxt/
+
+# Gatsby files
+.cache/
+public/
+
+# Gridsome files
+.cache/
+dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+
+# Others
+.pnpm-debug.log*

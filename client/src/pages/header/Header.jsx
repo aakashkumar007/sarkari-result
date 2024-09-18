@@ -20,7 +20,7 @@ const Header = () => {
       const token = Cookies.get("token"); // Fetch the token from cookies
       if (token) {
         // Simulate fetching user info based on the token, e.g., a stored user object in cookies or a server call
-        const user = { name: "John Doe" }; // Replace this with actual user info from the token or server
+        const user = { name: "prakash" }; // Replace this with actual user info from the token or server
         dispatch(setUser(user)); // Set user info in Redux
       } else {
         dispatch(clearUser()); // Clear user info if not authenticated
@@ -39,6 +39,7 @@ const Header = () => {
       // Simulate logout by clearing cookies and Redux state
       Cookies.remove("token");
       localStorage.removeItem("token");
+      localStorage.removeItem("user")
 
       dispatch(clearUser()); // Clear user info in Redux state
       toast.success("Logout Success");

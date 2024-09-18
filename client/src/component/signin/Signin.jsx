@@ -43,13 +43,13 @@ const SignIn = () => {
       // Check if token exists and store it in localStorage
       if (token) {
         localStorage.setItem('token', token); // Save token in localStorage
-        console.log('Token saved:', token);
 
         // Optionally store email and password for future login prefilling
         localStorage.setItem('email', email);
         localStorage.setItem('password', password);
 
         // Dispatch user data to Redux store
+        
         dispatch(setUser(user));
 
         setSuccess('Login successful');
