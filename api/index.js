@@ -29,6 +29,9 @@ app.use('/api/admit-card', admitCardRoutes);
 
 
 const port = process.env.PORT;
+
+app.get("/",(req,res)=>res.send("Welcome to job route"))
+
 app.listen(port, () => {
   console.log(`Server is running`); 
 });
