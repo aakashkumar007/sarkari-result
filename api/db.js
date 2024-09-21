@@ -5,7 +5,6 @@ const path = require("path");
 
 const mysql = require("mysql2");
 
-const caCert = fs.readFileSync(path.join(__dirname, "ca.pem"))
 
 const connection = mysql.createConnection({
   host: process.env.HOST,
@@ -13,10 +12,6 @@ const connection = mysql.createConnection({
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
   port:process.env.PORT,
-  ssl: {
-    ca: caCert.toString(),
-    rejectUnauthorized: true,
-  },
 });
 
 
