@@ -7,6 +7,7 @@ const admitCardRoutes = require("./routes/admitCardRoutes.js");
 require("dotenv").config();
 
 const cors = require('cors');
+//want to check it the git commit
 
 const frontendUrl=process.env.FRONTEND;
 
